@@ -26,12 +26,14 @@
     },
     "plugins": [
       "hypertrack-sdk-expo",
-      "expo-build-properties",
-      {
-        "android": {
-          "minSdkVersion": 23
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 23
+          }
         }
-      }
+      ]
     ]
   }
 }

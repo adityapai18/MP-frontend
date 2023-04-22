@@ -6,9 +6,11 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   updateProfile,
-  User,
 } from "firebase/auth";
 import axios from "axios";
+import baseUrl from "./baseUrl";
+import { User } from "./interfaces";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 interface Authcon {
   user: User ;
   signin: (email: string, password: string) => void;
@@ -35,12 +37,12 @@ export const useAppContext = () => {
 };
 function useProvideContext() {
   const [user, setUser] = useState<User>();
-  const signin = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password).then((response: any) => {
-      setUser(response.user);
-    }).catch((err)=>{
-      alert(err);
-    })
+  const signin = async (email: string, password: string) => {
+    const res = await axios.post(baseUrl+'patient/login',{email,password})
+    if(res.data.success){
+      await AsyncStorage.setItem('creds',JSON.stringify({email,password}))
+      setUser(res.data.data)
+    }
   };
   const signup = (
     email: string,
@@ -48,28 +50,12 @@ function useProvideContext() {
     firstName: string,
     lastName: string
   ) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((response: any) => {
-        updateProfile(response.user, {
-          displayName: firstName + " " + lastName,
-        })
-          .then(() => {
-            setUser(response.user);
-            return response;
-          })
-          .catch((error: any) => {
-            alert(error.message);
-            return;
-          });
-      })
-      .catch((error: Error) => {
-        alert(error.message);
-      });
+
   };
   const signout = () => {
-    signOut(auth).then(() => {
-      setUser(undefined);
-    });
+    // signOut(auth).then(() => {
+    //   setUser(undefined);
+    // });
   };
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
@@ -89,15 +75,12 @@ function useProvideContext() {
   //   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(undefined);
+    AsyncStorage.getItem('creds').then(val=>{
+      if(val){
+        const data = JSON.parse(val)
+        signin(data.email,data.password)
       }
-    });
-    // Cleanup subscription on unmount
-    return unsubscribe;
+    })
   }, []);
   // Return the user object and auth methods
   return {
