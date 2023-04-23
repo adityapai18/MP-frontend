@@ -16,16 +16,16 @@ const dummyData = [
   {
     title: 'STOP WAITING',
     body: 'in clinics & hospitals',
-    url: require('../assets/PeopleWaiting.json'),
+    url: require('../../assets/PeopleWaiting.json'),
   },
   {
     title: 'BOOK APPOINTMENTS',
-    url: require('../assets/AppointmentBooking.json'),
+    url: require('../../assets/AppointmentBooking.json'),
     body: 'with your favourite doctors',
   },
   {
     title: 'VIRTUAL LIVE QUEUE',
-    url: require('../assets/LiveQueue.json'),
+    url: require('../../assets/LiveQueue.json'),
     body: '& be on time for your consultations',
   },
 ];

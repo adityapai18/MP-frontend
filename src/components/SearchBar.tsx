@@ -9,7 +9,8 @@ import {
   Pressable,
   TextInputProps
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Ionicons } from "@expo/vector-icons";
+
 interface SearchBar {
   clicked: boolean;
   searchPhrase: string;
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 50,
     alignItems: 'center',
+    paddingVertical:8
   },
   input: {
     fontSize: 15,

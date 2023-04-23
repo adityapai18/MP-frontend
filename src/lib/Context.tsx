@@ -43,6 +43,7 @@ function useProvideContext() {
       await AsyncStorage.setItem('creds',JSON.stringify({email,password}))
       setUser(res.data.data)
     }
+    console.log(res.data)
   };
   const signup = (
     email: string,
@@ -52,10 +53,9 @@ function useProvideContext() {
   ) => {
 
   };
-  const signout = () => {
-    // signOut(auth).then(() => {
-    //   setUser(undefined);
-    // });
+  const signout = async() => {
+    await AsyncStorage.removeItem('creds')
+    setUser(undefined)
   };
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
