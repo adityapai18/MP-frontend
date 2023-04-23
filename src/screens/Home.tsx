@@ -31,6 +31,7 @@ import {
 } from "../lib/Helper";
 import { getDoctorsExtended } from "../lib/Api";
 import { DoctorExtended } from "../lib/interfaces";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 //   import {DocNearData} from '../lib/helpers/interfaces';
 
 const Home = ({ navigation }: any) => {
@@ -74,6 +75,9 @@ const Home = ({ navigation }: any) => {
       }
     });
     getAndSetClinics();
+    AsyncStorage.getItem("latestNoti").then((val) => {
+      if (val) alert(JSON.stringify(val));
+    });
   }, []);
   return (
     <>

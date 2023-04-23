@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect, useContext, createContext, useRef } from "react";
 import { auth } from "./Firebase";
 import {
   signInWithEmailAndPassword,
@@ -11,6 +11,9 @@ import axios from "axios";
 import baseUrl from "./baseUrl";
 import { User } from "./interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { registerForPushNotificationsAsync } from "./Helper";
+import * as Notifications from 'expo-notifications';
+
 interface Authcon {
   user: User ;
   signin: (email: string, password: string) => void;
@@ -37,6 +40,8 @@ export const useAppContext = () => {
 };
 function useProvideContext() {
   const [user, setUser] = useState<User>();
+  const notificationListener = useRef();
+  const responseListener = useRef();
   const signin = async (email: string, password: string) => {
     const res = await axios.post(baseUrl+'patient/login',{email,password})
     if(res.data.success){
@@ -73,7 +78,22 @@ function useProvideContext() {
   //         return true;
   //       });
   //   };
-
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => console.log(token));
+    //@ts-ignore
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      console.log(notification.request.content)
+    });
+    //@ts-ignore
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+  
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
   useEffect(() => {
     AsyncStorage.getItem('creds').then(val=>{
       if(val){
