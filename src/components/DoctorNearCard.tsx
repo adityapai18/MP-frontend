@@ -20,7 +20,7 @@ const DoctorNearCard = (props: DoctorNearCard) => {
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <Image
         source={{
-          uri: "https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg?w=2000",
+          uri: props.imageURL,
         }}
         style={{
           alignSelf: "center",

@@ -15,30 +15,22 @@ import { Fontisto } from "@expo/vector-icons";
 import ClinicStatus from "../components/ClinicStatus";
 import DoctorEducation from "../components/DoctorEducation";
 import DoctorAboutMe from "../components/DoctorAboutMe";
-import { calcDistance } from "../lib/Api";
+import { calcDistance, createBooking } from "../lib/Api";
 import { Clinic, DoctorExtended } from "../lib/interfaces";
 import * as Location from "expo-location";
+import { useAppContext } from "../lib/Context";
 const DocDetails = ({ navigation, route }: any) => {
   const docNearData: DoctorExtended = route.params.data;
- 
+  const context = useAppContext();
   // console.log(docNearData);
   // const locationData: Geolocation.GeoCoordinates = route.params.currPosition;
   // console.log(docNearData.mc_data.mc_timings[0].timings);
   const [LocationData, setLocation] = useState<Location.LocationObject>();
   const [Selected, setSelected] = useState<Clinic>(docNearData.Clinics[0]);
   useEffect(() => {
-    // setDistanceBetween(
-    //   calcDistance(
-    //     locationData.latitude,
-    //     locationData.longitude,
-    //     docNearData.mc_data.location_[0],
-    //     docNearData.mc_data.location_[1],
-    //   ),
-    // );
-  }, []);
-  useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+      // let { status } = await Location.requestBackgroundPermissionsAsync();
       if (status !== "granted") {
         return;
       }
@@ -133,7 +125,9 @@ const DocDetails = ({ navigation, route }: any) => {
                 marginTop: 8,
                 padding: 16,
               }}
-              onPress={()=>{setSelected(val.item)}}
+              onPress={() => {
+                setSelected(val.item);
+              }}
             >
               <View
                 style={{
@@ -179,8 +173,15 @@ const DocDetails = ({ navigation, route }: any) => {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            // navigation.navigate("QueueBooking", route.params);
+          onPress={async () => {
+            if (context?.user.uuid) {
+              const res = await createBooking(
+                Selected.Consultation.uuid,
+                context.user.uuid
+              );
+              if(res)
+              navigation.goBack()
+            }
           }}
         >
           <Text

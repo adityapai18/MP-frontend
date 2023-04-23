@@ -1,6 +1,8 @@
 import axios from "axios";
 import baseUrl from "./baseUrl";
 import { DoctorExtended } from "./interfaces";
+import { registerForPushNotificationsAsync } from "./Helper";
+import { getHyperDeviceId } from "./Hyper";
 
 export const registerInDb = async (data: {
   name: string;
@@ -11,7 +13,7 @@ export const registerInDb = async (data: {
   password: any;
 }) => {
   const res = await axios.post(baseUrl + "patient", { ...data });
-  console.log(res.data)
+  console.log(res.data);
   return res.data.createdAt ? true : false;
 };
 
@@ -40,4 +42,16 @@ export function calcDistance(
 export const getDoctorsExtended = async () => {
   const res = await axios.get(baseUrl + "doctor/list/?extended=true");
   return res.data as DoctorExtended[];
+};
+
+export const createBooking = async (cid: string, pid: string) => {
+  const fcm = await registerForPushNotificationsAsync();
+  const hyper = await getHyperDeviceId();
+  const res = await axios.post(baseUrl + "appointment", {
+    consultation_uuid: cid,
+    fcm_registration_token: fcm,
+    hypertrack_device_id: hyper,
+    patient_uuid: pid,
+  });
+  return res.data.uuid ? true : false
 };

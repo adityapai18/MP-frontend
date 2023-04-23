@@ -32,8 +32,8 @@ const MyAccount = ({ navigation }: any) => {
   const [FCM, setFCM] = useState("");
   const [HyperToken, setHyperToken] = useState("");
   useEffect(() => {
-    // getHyperDeviceId().then(setHyperToken);
-    // registerForPushNotificationsAsync().then(setFCM);
+    getHyperDeviceId().then(setHyperToken);
+    registerForPushNotificationsAsync().then(setFCM);
   }, []);
   return (
     <SafeAreaView style={styles.container}>
