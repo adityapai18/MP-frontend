@@ -24,6 +24,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LiveQueueOnGoing from "../components/LiveQueueOnGoing";
 import DoctorSpeciality from "../components/DoctorSpeciality";
 import { getHyperDeviceId } from "../lib/Hyper";
+import { registerForPushNotificationsAsync } from "../lib/hooks/Helper";
 //   import {DocNearData} from '../lib/helpers/interfaces';
 
 const Home = ({ navigation }: any) => {
@@ -52,7 +53,7 @@ const Home = ({ navigation }: any) => {
       greet = "Good Afternoon";
     } else {
       greet = "Good Evening";
-    }    
+    }
     return greet;
   };
 
@@ -76,10 +77,11 @@ const Home = ({ navigation }: any) => {
       .catch((err) => console.log(err));
   };
   useEffect(() => {
+
   }, []);
   return (
     <>
-      <ScrollView contentContainerStyle={{flex:1}}>
+      <ScrollView contentContainerStyle={{ flex: 1 }}>
         <SafeAreaView style={style.mainConatiner}>
           <View style={{ marginBottom: 10 }}>
             <Image
@@ -89,7 +91,7 @@ const Home = ({ navigation }: any) => {
                 top: -55,
                 height: 150,
                 width: 150,
-                marginBottom:-105
+                marginBottom: -105,
               }}
             ></Image>
             <Text
@@ -105,7 +107,7 @@ const Home = ({ navigation }: any) => {
               searchPhrase={searchPhrase}
               setSearchPhrase={setSearchPhrase}
               clicked={clicked}
-            //   onSearchBarPressed={() => navigation.navigate("SearchPage")}
+              //   onSearchBarPressed={() => navigation.navigate("SearchPage")}
               setClicked={setClicked}
             ></SearchBar>
           </View>
@@ -150,6 +152,7 @@ const Home = ({ navigation }: any) => {
               />
             )}
           />
+     
         </SafeAreaView>
       </ScrollView>
       <BottomSheet
