@@ -40,6 +40,7 @@ export const getAllPermissions = async () => {
 
   const background = await PermissionsAndroid.request('android.permission.ACCESS_BACKGROUND_LOCATION')
   // PermissionsAndroid.request('Acti')
+  console.log(background)
   return (
     permissions['android.permission.ACTIVITY_RECOGNITION'] == 'granted' &&
     permissions['android.permission.ACCESS_FINE_LOCATION'] == 'granted' &&

@@ -23,7 +23,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { getHyperDeviceId } from "../lib/Hyper";
-import { registerForPushNotificationsAsync } from "../lib/hooks/Helper";
+import { registerForPushNotificationsAsync } from "../lib/Helper";
 
 const MyAccount = ({ navigation }: any) => {
   const auth = useAppContext();
@@ -32,8 +32,8 @@ const MyAccount = ({ navigation }: any) => {
   const [FCM, setFCM] = useState("");
   const [HyperToken, setHyperToken] = useState("");
   useEffect(() => {
-    getHyperDeviceId().then(setHyperToken);
-    registerForPushNotificationsAsync().then(setFCM);
+    // getHyperDeviceId().then(setHyperToken);
+    // registerForPushNotificationsAsync().then(setFCM);
   }, []);
   return (
     <SafeAreaView style={styles.container}>

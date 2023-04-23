@@ -24,7 +24,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LiveQueueOnGoing from "../components/LiveQueueOnGoing";
 import DoctorSpeciality from "../components/DoctorSpeciality";
 import { getHyperDeviceId } from "../lib/Hyper";
-import { registerForPushNotificationsAsync } from "../lib/hooks/Helper";
+import {
+  checkPermissions,
+  getAllPermissions,
+  registerForPushNotificationsAsync,
+} from "../lib/Helper";
+import { getDoctorsExtended } from "../lib/Api";
+import { DoctorExtended } from "../lib/interfaces";
 //   import {DocNearData} from '../lib/helpers/interfaces';
 
 const Home = ({ navigation }: any) => {
@@ -34,14 +40,13 @@ const Home = ({ navigation }: any) => {
   const [clicked, setClicked] = useState(false);
   const [trigger, setTrigger] = useState(0);
   const [DocSpec, setDocSpec] = useState<string[]>([]);
-  const [NearDoc, setNearDoc] = useState<any[]>([]);
+  const [NearDoc, setNearDoc] = useState<DoctorExtended[]>([]);
   const [ShowBottomSheet, setShowBottomSheet] = useState(false);
 
-  const onNearDocPress = (item: any) => {
-    // navigation.navigate("DocDetails", {
-    //   data: item,
-    //   currPosition: LocationGiven,
-    // });
+  const onNearDocPress = async (item: any) => {
+    navigation.navigate("DocDetails", {
+      data: item,
+    });
   };
   const greeting = () => {
     const date = new Date();
@@ -56,33 +61,24 @@ const Home = ({ navigation }: any) => {
     }
     return greet;
   };
-
-  const reqPermission = () => {
-    PermissionsAndroid.request("android.permission.ACCESS_FINE_LOCATION")
-      .then((value) => {
-        // console.log(value);
-        if (value === "granted") {
-          // reqPermission();
-          navigation.getParent().setOptions({
-            tabBarStyle: {
-              display: "flex",
-              height: 65,
-            },
-          });
-        }
-        if (value === "denied") {
-          setTrigger(trigger + 1);
-        }
-      })
-      .catch((err) => console.log(err));
+  const getAndSetClinics = async () => {
+    const data = await getDoctorsExtended();
+    setNearDoc(data);
+    setLoading(false);
+    console.log(data[0]);
   };
   useEffect(() => {
-
+    checkPermissions().then((val) => {
+      if (!val) {
+        setShowBottomSheet(true);
+      }
+    });
+    getAndSetClinics();
   }, []);
   return (
     <>
-      <ScrollView contentContainerStyle={{ flex: 1 }}>
-        <SafeAreaView style={style.mainConatiner}>
+      <SafeAreaView style={style.mainConatiner}>
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
           <View style={{ marginBottom: 10 }}>
             <Image
               source={require("../../assets/Logo.png")}
@@ -136,25 +132,26 @@ const Home = ({ navigation }: any) => {
           <FlatList
             data={NearDoc}
             horizontal
+            showsHorizontalScrollIndicator={false}
             nestedScrollEnabled
             contentContainerStyle={{
-              marginVertical: 10,
-              marginBottom: 80,
+              // marginVertical: 10,
+              marginBottom: 40,
+              marginTop: 10,
             }}
             renderItem={(val) => (
               <DoctorNearCard
-                key={val.item.mc_data.mc_id}
-                speciality={val.item.doc_data.specialization.join(" , ")}
+                key={val.item.uuid}
+                speciality={""}
                 onPress={() => onNearDocPress(val.item)}
-                imageURL={val.item.doc_data.img_link}
-                fname={val.item.doc_data.name_.split(" ")[0]}
-                lname={val.item.doc_data.name_.split(" ")[1]}
+                imageURL={val.item.photo}
+                fname={val.item.name.split(" ")[0]}
+                lname={val.item.name.split(" ")[1]}
               />
             )}
           />
-     
-        </SafeAreaView>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
       <BottomSheet
         show={ShowBottomSheet}
         height={550}
@@ -197,7 +194,7 @@ const Home = ({ navigation }: any) => {
           </Text>
           <TouchableOpacity
             onPress={() => {
-              reqPermission();
+              getAllPermissions().then(setShowBottomSheet);
               setShowBottomSheet(false);
             }}
             style={style.bottomSheetCloseButton}
@@ -207,12 +204,6 @@ const Home = ({ navigation }: any) => {
           <TouchableOpacity
             onPress={() => {
               setShowBottomSheet(false);
-              navigation.getParent().setOptions({
-                tabBarStyle: {
-                  display: "flex",
-                  height: 65,
-                },
-              });
             }}
           >
             <Text

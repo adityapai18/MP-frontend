@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { COLORS } from '../constants/theme';
 import { MaterialCommunityIcons , Octicons , SimpleLineIcons } from "@expo/vector-icons";
 import MyAccount from '../screens/MyAccount';
+import HomeStack from './nested/HomeStack';
 
 const UserStack = () => {
   const Tab = createBottomTabNavigator();
@@ -27,7 +28,7 @@ const UserStack = () => {
         initialRouteName="HomeStack">
         <Tab.Screen
           name="HomeStack"
-          component={Home}
+          component={HomeStack}
           options={{
             tabBarIcon: ({focused}) => {
               return (
