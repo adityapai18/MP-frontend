@@ -82,15 +82,17 @@ function useProvideContext() {
     registerForPushNotificationsAsync().then(token => console.log(token));
     //@ts-ignore
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification.request.content)
+      alert(JSON.stringify(notification.request.content))
     });
     //@ts-ignore
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      alert(JSON.stringify(response.notification.request.content));
     });
   
     return () => {
+      //@ts-ignore
       Notifications.removeNotificationSubscription(notificationListener.current);
+      //@ts-ignore
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
