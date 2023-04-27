@@ -9,10 +9,11 @@ import {
 } from "firebase/auth";
 import axios from "axios";
 import baseUrl from "./baseUrl";
-import { User } from "./interfaces";
+import { FCMMessage, User } from "./interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerForPushNotificationsAsync } from "./Helper";
 import * as Notifications from 'expo-notifications';
+import { getHyperDeviceId } from "./Hyper";
 
 interface Authcon {
   user: User ;
@@ -27,6 +28,7 @@ interface Authcon {
   updateProfilePic:(
     photourl:string
   )=>void;
+  NotificationData: FCMMessage | undefined
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -42,6 +44,7 @@ function useProvideContext() {
   const [user, setUser] = useState<User>();
   const notificationListener = useRef();
   const responseListener = useRef();
+  const [NotificationData, setNotificationData] = useState<FCMMessage>()
   const signin = async (email: string, password: string) => {
     const res = await axios.post(baseUrl+'patient/login',{email,password})
     if(res.data.success){
@@ -82,11 +85,13 @@ function useProvideContext() {
     registerForPushNotificationsAsync().then(token => console.log(token));
     //@ts-ignore
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      alert(JSON.stringify(notification.request.content))
+      console.log(notification.request.content)
+      setNotificationData(JSON.parse(notification.request.content.subtitle))
+      // JSON.stringify(notification.request.content)
     });
     //@ts-ignore
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      alert(JSON.stringify(response.notification.request.content));
+      setNotificationData(JSON.parse(response.notification.request.content.subtitle))
     });
   
     return () => {
@@ -103,6 +108,7 @@ function useProvideContext() {
         signin(data.email,data.password)
       }
     })
+    getHyperDeviceId()
   }, []);
   // Return the user object and auth methods
   return {
@@ -110,6 +116,7 @@ function useProvideContext() {
     signin,
     signup,
     signout,
+    NotificationData
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

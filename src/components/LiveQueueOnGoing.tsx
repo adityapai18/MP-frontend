@@ -1,35 +1,27 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons,FontAwesome5 } from "@expo/vector-icons";
+import { useAppContext } from '../lib/Context';
+
 interface CurrentNotification {
-  data: {
-    clinic: string;
-    time: string;
-    in_pat: string;
-    queue_pos: string;
-    eta: string;
-  };
   Visible?: boolean;
   SetVisible?: React.Dispatch<React.SetStateAction<boolean>>;
   onPressOpen: () => void;
 }
 const LiveQueueOnGoing = ({
-  data,
-  Visible = true,
-  SetVisible,
   onPressOpen,
 }: CurrentNotification) => {
+  const auth = useAppContext()
   return (
-    <View style={[styles.container, {display: Visible ? 'flex' : 'none'}]}>
+    <View style={[styles.container]}>
       <View style={{flex: 0.2, justifyContent: 'center'}}>
         <View style={styles.position}>
-          <Text style={{fontSize: 24, color: 'white'}}>{data.queue_pos}</Text>
+          <Text style={{fontSize: 24, color: 'white'}}>{auth?.NotificationData?.position}</Text>
         </View>
       </View>
       <View style={{marginLeft: 10, flex: 0.5}}>
         <Text style={{fontSize: 12, color: 'white', fontWeight: '600'}}>
-          Queue at {data.clinic}
+          Status: {auth?.NotificationData?.status}
         </Text>
         <View
           style={{
@@ -61,7 +53,7 @@ const LiveQueueOnGoing = ({
                 color: '#24A4DE',
                 fontWeight: '600',
               }}>
-              {data.eta}
+              {auth?.NotificationData?.eta}
             </Text>
           </View>
           <View
@@ -81,7 +73,7 @@ const LiveQueueOnGoing = ({
                 color: '#24A4DE',
                 fontWeight: '600',
               }}>
-              {data.in_pat}
+              {auth?.NotificationData?.size}
             </Text>
           </View>
         </View>

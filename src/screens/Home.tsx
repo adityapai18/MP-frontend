@@ -154,6 +154,7 @@ const Home = ({ navigation }: any) => {
               />
             )}
           />
+            {auth?.NotificationData && <LiveQueueOnGoing />}
         </ScrollView>
       </SafeAreaView>
       <BottomSheet
@@ -197,8 +198,8 @@ const Home = ({ navigation }: any) => {
             appointments even when the app is not in use
           </Text>
           <TouchableOpacity
-            onPress={() => {
-              getAllPermissions().then(setShowBottomSheet);
+            onPress={async () => {
+              await getAllPermissions();
               setShowBottomSheet(false);
             }}
             style={style.bottomSheetCloseButton}

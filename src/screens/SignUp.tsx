@@ -47,7 +47,7 @@ const SignUp = ({ navigation }: any) => {
             ]}
           >
             Welcome to {""}
-            <Text style={{ color: COLORS.primary }}>DocTrue</Text>
+            <Text style={{ color: COLORS.primary }}>My Doctor</Text>
           </Text>
           <Text style={styles.subText}>Let us get to know you better!</Text>
         </View>
@@ -161,7 +161,7 @@ const SignUp = ({ navigation }: any) => {
                   }}
                 >
                   <Text style={[styles.text, { color: COLORS.dark }]}>
-                    By clicking here I agree to DocTrue's
+                    By clicking here I agree to My Doctor's
                   </Text>
                   <TouchableOpacity
                     onPress={() => {

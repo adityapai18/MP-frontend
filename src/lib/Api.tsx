@@ -46,11 +46,11 @@ export const getDoctorsExtended = async () => {
 
 export const createBooking = async (cid: string, pid: string) => {
   const fcm = await registerForPushNotificationsAsync();
-  const hyper = await getHyperDeviceId();
+  // const hyper = await getHyperDeviceId();
   const res = await axios.post(baseUrl + "appointment", {
     consultation_uuid: cid,
     fcm_registration_token: fcm,
-    hypertrack_device_id: hyper,
+    hypertrack_device_id: 'hyper',
     patient_uuid: pid,
   });
   return res.data.uuid ? true : false

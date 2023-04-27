@@ -75,9 +75,9 @@ const MyAccount = ({ navigation }: any) => {
               alignItems: "center",
               marginTop: 20,
             }}
-            onPress={() =>
-              Linking.openURL("https://www.doctrue.in/privacy_policy")
-            }
+            onPress={() =>{}}
+              // Linking.penURL("https://www.doctrue.in/privacy_policy")
+            
           >
             <MaterialCommunityIcons
               name="file-document-edit-outline"
