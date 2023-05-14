@@ -15,10 +15,8 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
       <View style={{ flex: 0.2, justifyContent: "center" }}>
         <View style={styles.position}>
           <Text style={{ fontSize: 24, color: "white" }}>
-            {auth?.NotificationData?.position
-              ? auth?.NotificationData?.position
-                ? auth?.NotificationData?.position
-                : ""
+            {auth?.NotificationData && auth.NotificationData.position
+              ? auth.NotificationData.position
               : ""}
           </Text>
         </View>
@@ -26,7 +24,9 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
       <View style={{ marginLeft: 10, flex: 0.5 }}>
         <Text style={{ fontSize: 12, color: "white", fontWeight: "600" }}>
           Status:{" "}
-          {auth?.NotificationData?.status ? auth?.NotificationData?.status : ""}
+          {auth?.NotificationData && auth.NotificationData.status
+              ? auth.NotificationData.status
+              : ""}
         </Text>
         <View
           style={{
@@ -62,7 +62,9 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
                 fontWeight: "600",
               }}
             >
-              {auth?.NotificationData?.eta ? auth?.NotificationData?.eta : ""}
+              {auth?.NotificationData && auth.NotificationData.eta
+              ? auth.NotificationData.eta
+              : ""}
             </Text>
           </View>
           <View
@@ -84,7 +86,9 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
                 fontWeight: "600",
               }}
             >
-              {auth?.NotificationData?.size ? auth?.NotificationData?.size : ""}
+              {auth?.NotificationData && auth.NotificationData.status
+              ? auth.NotificationData.status
+              : ""}
             </Text>
           </View>
         </View>

@@ -92,8 +92,9 @@ function useProvideContext() {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log(notification.request.content);
+        alert(notification.request.content.subtitle)
         const notiData = JSON.parse(notification.request.content.subtitle);
-        if (notiData.status && notiData.status == "scheduled")
+        if (notiData && notiData.status && notiData.status == "scheduled")
           setNotificationData(notiData);
         // JSON.stringify(notification.request.content)
       });
@@ -103,7 +104,7 @@ function useProvideContext() {
         const notiData = JSON.parse(
           response.notification.request.content.subtitle
         );
-        if (notiData.status && notiData.status == "scheduled")
+        if (notiData && notiData.status && notiData.status == "scheduled")
           setNotificationData(notiData);
       });
 
