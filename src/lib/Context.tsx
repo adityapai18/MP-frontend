@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, createContext, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  createContext,
+  useRef,
+} from "react";
 import { auth } from "./Firebase";
 import {
   signInWithEmailAndPassword,
@@ -12,11 +18,11 @@ import baseUrl from "./baseUrl";
 import { FCMMessage, User } from "./interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { registerForPushNotificationsAsync } from "./Helper";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 import { getHyperDeviceId } from "./Hyper";
 
 interface Authcon {
-  user: User ;
+  user: User;
   signin: (email: string, password: string) => void;
   signup: (
     email: string,
@@ -25,10 +31,8 @@ interface Authcon {
     lastName: string
   ) => void;
   signout: () => void;
-  updateProfilePic:(
-    photourl:string
-  )=>void;
-  NotificationData: FCMMessage | undefined
+  updateProfilePic: (photourl: string) => void;
+  NotificationData: FCMMessage | undefined;
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -44,26 +48,27 @@ function useProvideContext() {
   const [user, setUser] = useState<User>();
   const notificationListener = useRef();
   const responseListener = useRef();
-  const [NotificationData, setNotificationData] = useState<FCMMessage>()
+  const [NotificationData, setNotificationData] = useState<FCMMessage>();
   const signin = async (email: string, password: string) => {
-    const res = await axios.post(baseUrl+'patient/login',{email,password})
-    if(res.data.success){
-      await AsyncStorage.setItem('creds',JSON.stringify({email,password}))
-      setUser(res.data.data)
+    const res = await axios.post(baseUrl + "patient/login", {
+      email,
+      password,
+    });
+    if (res.data.success) {
+      await AsyncStorage.setItem("creds", JSON.stringify({ email, password }));
+      setUser(res.data.data);
     }
-    console.log(res.data)
+    console.log(res.data);
   };
   const signup = (
     email: string,
     password: string,
     firstName: string,
     lastName: string
-  ) => {
-
-  };
-  const signout = async() => {
-    await AsyncStorage.removeItem('creds')
-    setUser(undefined)
+  ) => {};
+  const signout = async () => {
+    await AsyncStorage.removeItem("creds");
+    setUser(undefined);
   };
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
@@ -82,33 +87,43 @@ function useProvideContext() {
   //       });
   //   };
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => console.log(token));
+    registerForPushNotificationsAsync().then((token) => console.log(token));
     //@ts-ignore
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification.request.content)
-      setNotificationData(JSON.parse(notification.request.content.subtitle))
-      // JSON.stringify(notification.request.content)
-    });
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log(notification.request.content);
+        const notiData = JSON.parse(notification.request.content.subtitle);
+        if (notiData.status && notiData.status == "scheduled")
+          setNotificationData(notiData);
+        // JSON.stringify(notification.request.content)
+      });
     //@ts-ignore
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      setNotificationData(JSON.parse(response.notification.request.content.subtitle))
-    });
-  
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const notiData = JSON.parse(
+          response.notification.request.content.subtitle
+        );
+        if (notiData.status && notiData.status == "scheduled")
+          setNotificationData(notiData);
+      });
+
     return () => {
       //@ts-ignore
-      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
       //@ts-ignore
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
   useEffect(() => {
-    AsyncStorage.getItem('creds').then(val=>{
-      if(val){
-        const data = JSON.parse(val)
-        signin(data.email,data.password)
+    AsyncStorage.getItem("creds").then((val) => {
+      if (val) {
+        const data = JSON.parse(val);
+        signin(data.email, data.password);
       }
-    })
-    getHyperDeviceId()
+    });
+    getHyperDeviceId();
   }, []);
   // Return the user object and auth methods
   return {
@@ -116,7 +131,7 @@ function useProvideContext() {
     signin,
     signup,
     signout,
-    NotificationData
+    NotificationData,
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

@@ -29,8 +29,8 @@ const DocDetails = ({ navigation, route }: any) => {
   const [Selected, setSelected] = useState<Clinic>(docNearData.Clinics[0]);
   useEffect(() => {
     (async () => {
-      // let { status } = await Location.requestForegroundPermissionsAsync();
-      // // let { status } = await Location.requestBackgroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      // let { status } = await Location.requestBackgroundPermissionsAsync();
       // if (status !== "granted") {
       //   return;
       // }

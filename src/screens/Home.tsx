@@ -154,7 +154,7 @@ const Home = ({ navigation }: any) => {
               />
             )}
           />
-            {auth?.NotificationData && <LiveQueueOnGoing />}
+            {auth?.NotificationData && <LiveQueueOnGoing onPressOpen={()=>{}} />}
         </ScrollView>
       </SafeAreaView>
       <BottomSheet
