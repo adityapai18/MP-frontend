@@ -33,6 +33,7 @@ interface Authcon {
   signout: () => void;
   updateProfilePic: (photourl: string) => void;
   NotificationData: FCMMessage | undefined;
+  Loading:boolean
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -49,6 +50,7 @@ function useProvideContext() {
   const notificationListener = useRef();
   const responseListener = useRef();
   const [NotificationData, setNotificationData] = useState<FCMMessage>();
+  const [Loading, setLoading] = useState(false);
   const signin = async (email: string, password: string) => {
     const res = await axios.post(baseUrl + "patient/login", {
       email,
@@ -92,10 +94,23 @@ function useProvideContext() {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log(notification.request.content);
-        alert(notification.request.content.subtitle)
+        // alert(notification.request.content.subtitle)
+        if (notification.request.content.subtitle == null) {
+          setLoading(true);
+        }
         const notiData = JSON.parse(notification.request.content.subtitle);
-        if (notiData && notiData.status && notiData.status == "scheduled")
+        if (notiData && notiData.status && notiData.status == "scheduled") {
           setNotificationData(notiData);
+          AsyncStorage.setItem("latestNoti", JSON.stringify(notiData)).then(
+            () => setLoading(false)
+          );
+        } else if (
+          notiData &&
+          notiData.status &&
+          notiData.status == "cancelled"
+        ) {
+          alert("Appointment Cancelled");
+        }
         // JSON.stringify(notification.request.content)
       });
     //@ts-ignore
@@ -104,8 +119,21 @@ function useProvideContext() {
         const notiData = JSON.parse(
           response.notification.request.content.subtitle
         );
-        if (notiData && notiData.status && notiData.status == "scheduled")
+        if (response.notification.request.content.subtitle == null) {
+          setLoading(true);
+        }
+        if (notiData && notiData.status && notiData.status == "scheduled") {
           setNotificationData(notiData);
+          AsyncStorage.setItem("latestNoti", JSON.stringify(notiData)).then(
+            () => setLoading(false)
+          );
+        } else if (
+          notiData &&
+          notiData.status &&
+          notiData.status == "cancelled"
+        ) {
+          alert("Appointment Cancelled");
+        }
       });
 
     return () => {
@@ -125,6 +153,12 @@ function useProvideContext() {
       }
     });
     getHyperDeviceId();
+    AsyncStorage.getItem('latestNoti').then(val=>{
+      if(val){
+        const data = JSON.parse(val);
+        setNotificationData(data)
+      }
+    })
   }, []);
   // Return the user object and auth methods
   return {
@@ -133,6 +167,7 @@ function useProvideContext() {
     signup,
     signout,
     NotificationData,
+    Loading
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

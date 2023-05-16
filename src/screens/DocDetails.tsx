@@ -30,11 +30,12 @@ const DocDetails = ({ navigation, route }: any) => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+      alert(status);
       // let { status } = await Location.requestBackgroundPermissionsAsync();
       // if (status !== "granted") {
       //   return;
       // }
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({ accuracy: 6 });
       setLocation(location);
     })();
   }, []);
@@ -178,8 +179,7 @@ const DocDetails = ({ navigation, route }: any) => {
                 Selected.Consultation.uuid,
                 context.user.uuid
               );
-              if(res)
-              navigation.goBack()
+              if (res) navigation.goBack();
             }
           }}
         >

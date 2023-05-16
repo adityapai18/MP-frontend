@@ -25,8 +25,8 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
         <Text style={{ fontSize: 12, color: "white", fontWeight: "600" }}>
           Status:{" "}
           {auth?.NotificationData && auth.NotificationData.status
-              ? auth.NotificationData.status
-              : ""}
+            ? auth.NotificationData.status
+            : ""}
         </Text>
         <View
           style={{
@@ -63,8 +63,8 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
               }}
             >
               {auth?.NotificationData && auth.NotificationData.eta
-              ? auth.NotificationData.eta
-              : ""}
+                ? auth.NotificationData.eta.split(":").slice(0, -2).join(":")
+                : ""}
             </Text>
           </View>
           <View
@@ -87,8 +87,8 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
               }}
             >
               {auth?.NotificationData && auth.NotificationData.status
-              ? auth.NotificationData.status
-              : ""}
+                ? auth.NotificationData.status
+                : ""}
             </Text>
           </View>
         </View>

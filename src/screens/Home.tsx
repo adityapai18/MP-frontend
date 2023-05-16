@@ -32,6 +32,7 @@ import {
 import { getDoctorsExtended } from "../lib/Api";
 import { DoctorExtended } from "../lib/interfaces";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Loader from "../components/Loader";
 //   import {DocNearData} from '../lib/helpers/interfaces';
 
 const Home = ({ navigation }: any) => {
@@ -140,7 +141,7 @@ const Home = ({ navigation }: any) => {
             nestedScrollEnabled
             contentContainerStyle={{
               // marginVertical: 10,
-              marginBottom: 40,
+              marginBottom: auth?.NotificationData ? 40 : 88,
               marginTop: 10,
             }}
             renderItem={(val) => (
@@ -154,7 +155,10 @@ const Home = ({ navigation }: any) => {
               />
             )}
           />
-            {auth?.NotificationData && <LiveQueueOnGoing onPressOpen={()=>{}} />}
+          {auth?.NotificationData && (
+            <LiveQueueOnGoing onPressOpen={() => {}} />
+          )}
+          {auth?.Loading && <Loader />}
         </ScrollView>
       </SafeAreaView>
       <BottomSheet
