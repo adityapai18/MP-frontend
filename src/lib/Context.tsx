@@ -59,6 +59,8 @@ function useProvideContext() {
     if (res.data.success) {
       await AsyncStorage.setItem("creds", JSON.stringify({ email, password }));
       setUser(res.data.data);
+    }else{
+      alert(res.data.reason);
     }
     console.log(res.data);
   };
