@@ -33,7 +33,7 @@ interface Authcon {
   signout: () => void;
   updateProfilePic: (photourl: string) => void;
   NotificationData: FCMMessage | undefined;
-  Loading:boolean
+  Loading: boolean;
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -59,7 +59,7 @@ function useProvideContext() {
     if (res.data.success) {
       await AsyncStorage.setItem("creds", JSON.stringify({ email, password }));
       setUser(res.data.data);
-    }else{
+    } else {
       alert(res.data.reason);
     }
     console.log(res.data);
@@ -72,6 +72,7 @@ function useProvideContext() {
   ) => {};
   const signout = async () => {
     await AsyncStorage.removeItem("creds");
+    await AsyncStorage.removeItem("booked");
     setUser(undefined);
   };
   //   const sendPasswordResetEmail = (email) => {
@@ -155,12 +156,12 @@ function useProvideContext() {
       }
     });
     getHyperDeviceId();
-    AsyncStorage.getItem('latestNoti').then(val=>{
-      if(val){
+    AsyncStorage.getItem("latestNoti").then((val) => {
+      if (val) {
         const data = JSON.parse(val);
-        setNotificationData(data)
+        setNotificationData(data);
       }
-    })
+    });
   }, []);
   // Return the user object and auth methods
   return {
@@ -169,7 +170,7 @@ function useProvideContext() {
     signup,
     signout,
     NotificationData,
-    Loading
+    Loading,
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

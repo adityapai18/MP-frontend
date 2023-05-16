@@ -76,14 +76,14 @@ const Home = ({ navigation }: any) => {
       }
     });
     getAndSetClinics();
-    AsyncStorage.getItem("latestNoti").then((val) => {
-      if (val) alert(JSON.stringify(val));
-    });
+    // AsyncStorage.getItem("latestNoti").then((val) => {
+    //   if (val) alert(JSON.stringify(val));
+    // });
   }, []);
   return (
     <>
       <SafeAreaView style={style.mainConatiner}>
-        <ScrollView contentContainerStyle={{ flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ marginBottom: 10 }}>
             <Image
               source={require("../../assets/Logo.png")}
@@ -141,7 +141,7 @@ const Home = ({ navigation }: any) => {
             nestedScrollEnabled
             contentContainerStyle={{
               // marginVertical: 10,
-              marginBottom: 16,
+              marginBottom: auth?.NotificationData? 88 : 48 ,
               marginTop: 10,
             }}
             renderItem={(val) => (
@@ -155,13 +155,9 @@ const Home = ({ navigation }: any) => {
               />
             )}
           />
-          {auth?.Loading ||
-            (auth?.NotificationData && <View style={{ paddingBottom: 88 }} />)}
-          {auth?.NotificationData && (
-            <LiveQueueOnGoing onPressOpen={() => {}} />
-          )}
-          {auth?.Loading && <Loader />}
         </ScrollView>
+        {auth?.NotificationData && <LiveQueueOnGoing onPressOpen={() => {}} />}
+        {auth?.Loading && <Loader />}
       </SafeAreaView>
       <BottomSheet
         show={ShowBottomSheet}

@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Linking,
+} from "react-native";
 import React from "react";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useAppContext } from "../lib/Context";
@@ -109,7 +115,17 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
           alignSelf: "center",
         }}
       >
-        <TouchableOpacity style={styles.button} onPress={onPressOpen}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={async () => {
+            if (
+              auth?.NotificationData?.share_url &&
+              (await Linking.canOpenURL(auth?.NotificationData?.share_url))
+            ) {
+              await Linking.openURL(auth?.NotificationData?.share_url);
+            }
+          }}
+        >
           <Text style={{ color: "white" }}>Open</Text>
         </TouchableOpacity>
       </View>
