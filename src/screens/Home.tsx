@@ -141,7 +141,7 @@ const Home = ({ navigation }: any) => {
             nestedScrollEnabled
             contentContainerStyle={{
               // marginVertical: 10,
-              marginBottom: auth?.NotificationData ? 40 : 88,
+              marginBottom: 16,
               marginTop: 10,
             }}
             renderItem={(val) => (
@@ -155,6 +155,8 @@ const Home = ({ navigation }: any) => {
               />
             )}
           />
+          {auth?.Loading ||
+            (auth?.NotificationData && <View style={{ paddingBottom: 88 }} />)}
           {auth?.NotificationData && (
             <LiveQueueOnGoing onPressOpen={() => {}} />
           )}

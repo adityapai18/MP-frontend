@@ -156,15 +156,14 @@ const DocDetails = ({ navigation, route }: any) => {
                   </Text>
                   <Text style={styles.text}>
                     <Text style={{ fontWeight: "bold" }}>Distance : </Text>
-                    {LocationData &&
-                      calcDistance(
-                        LocationData.coords.latitude,
-                        LocationData.coords.longitude,
-                        val.item.lat,
-                        val.item.long
-                      )
-                        .toFixed(2)
-                        .toString() + " Kms"}
+                    {calcDistance(
+                      19.075036,
+                      72.899204,
+                      val.item.lat,
+                      val.item.long
+                    )
+                      .toFixed(2)
+                      .toString() + " Kms"}
                   </Text>
                 </View>
               </View>

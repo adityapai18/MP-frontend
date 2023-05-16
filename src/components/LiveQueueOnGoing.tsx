@@ -63,22 +63,30 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
               }}
             >
               {auth?.NotificationData && auth.NotificationData.eta
-                ? auth.NotificationData.eta.split(":").slice(0, -2).join(":")
+                ? auth.NotificationData.eta
                 : ""}
             </Text>
           </View>
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 2,
-            }}
-          >
-            <MaterialCommunityIcons
-              name="human-queue"
-              size={16}
-              color="white"
-            />
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 2,
+                alignItems: "center",
+              }}
+            >
+              <FontAwesome5 name="clock" size={16} color="white" />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: "white",
+                  fontWeight: "600",
+                  marginLeft: 4,
+                }}
+              >
+                ETD
+              </Text>
+            </View>
             <Text
               style={{
                 fontSize: 12,
@@ -86,8 +94,8 @@ const LiveQueueOnGoing = ({ onPressOpen }: CurrentNotification) => {
                 fontWeight: "600",
               }}
             >
-              {auth?.NotificationData && auth.NotificationData.status
-                ? auth.NotificationData.status
+              {auth?.NotificationData && auth.NotificationData.eta
+                ? auth.NotificationData.etd
                 : ""}
             </Text>
           </View>
