@@ -182,11 +182,11 @@ const DocDetails = ({ navigation, route }: any) => {
         <TouchableOpacity
           style={[
             styles.button,
-            PrevBooked.includes(Selected.Consultation.uuid)
+            PrevBooked.length > 0
               ? { opacity: 0.5 }
               : { opacity: 1 },
           ]}
-          disabled={PrevBooked.includes(Selected.Consultation.uuid)}
+          disabled={PrevBooked.length > 0}
           onPress={async () => {
             if (context?.user.uuid) {
               const res = await createBooking(
